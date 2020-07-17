@@ -30,7 +30,8 @@ end
 
 function set_loop()
     local duration = mp.get_property_native("duration")
-
+    local playlist_count = mp.get_property_native("playlist-count") 
+    
     -- Checks whether the loop status was changed for the last file
     was_loop = mp.get_property_native("loop-file")
 
@@ -39,8 +40,8 @@ function set_loop()
         return
     end
 
-    -- Loops file if was_loop is false, and file meets requirements
-    if not was_loop and duration <= autoloop_duration then
+    -- Loops file if was_loop is false, if file is not a part of a playlist and meets duration requirement
+    if not was_loop and duration <= autoloop_duration and playlist_count < 2 then
         mp.set_property_native("loop-file", true)
         -- Unloops file if was_loop is true, and file does not meet requirements
     elseif was_loop and duration > autoloop_duration then
